@@ -1,15 +1,16 @@
 import os
 import time
+import math
 
-X_MAX = 240
+X_MAX = 261
 X_MIN = 0
 Y_MAX = 0 # first row of terminal is at y = 0
-Y_MIN = 50 # last row of terminal is at y = Y_MIN
+Y_MIN = 60 # last row of terminal is at y = Y_MIN
 
 X_MID = 120 # mid of x
-Y_MID = 25  # mid of y
+Y_MID = 30  # mid of y
 
-DELAY = 0.001 # delay of drawing 
+DELAY = 0.01 # delay of drawing 
 
 class dot: # x,y coordinate
     def __init__(self, x, y): 
@@ -49,20 +50,24 @@ class dot: # x,y coordinate
         else:
             slope = y_diff/x_diff # slope = y/x
 
+        counter = 1
+
         # draw a line with y = a*x function or a horizontal line
         if x_diff != 0:
             for x in range(self.x, end_c.x, c_x):
                 if slope > 0: # when diff of x,y both pos or neg. The line is in between top-left and bot-right
                     # case 1: when diff of x,y both pos, line going down from top-left to bot-right. As x increases, y increases (reaching towards bot of screen) 
                     # case 2: when diff of x,y both neg, line going up from bot-right to top-left. As x decreases, y decreases (reaching towards top of screen) 
-                    y = int(slope*x) 
+                    y = self.y + round(slope*counter) 
+                    counter+=1
                 elif slope < 0: # if x_diff > 0, y_diff < 0, and vice versa. The line is in between top-right and bot-left
                     # case 1: when x_diff > 0, and y_diff < 0, line going up from bot-left to top-right. As x increases, y decreases (reaching towards top of screen)
                     # case 2: when x_diff < 0, and y_diff > 0, line going down from top-right to bot-left. As x decreases, y increases (reaching towards bot of screen)
-                    y = int(slope*x + Y_MIN)
+                    y = self.y + round(slope*counter)
+                    counter+=1
                 else: # when slope is 0 
                     y = end_c.y
-
+                print("x = " + str(x) + " y = " + str(y))
                 coord = dot(x,y)
                 #print("x = " + str(coord.x) + " y = " + str(coord.y))
                 coord.draw_dot()
@@ -85,26 +90,43 @@ def clear_terminal():
 
 if __name__ == "__main__":
     clear_terminal()
-    x_max = X_MAX
-    y_max = Y_MAX
-    x_min = X_MIN
-    y_min = Y_MIN
+    # 8 vertices of a cube
+    p1 = dot(100,20)
+    p2 = dot(140,20)
+    p3 = dot(100,40)
+    p4 = dot(140,40)
 
-    while(x_max > x_min or y_min > y_max):
-        top_left = dot(x_min, y_max)
-        top_right = dot(x_max, y_max)
-        bot_left = dot(x_min, y_min)
-        bot_right = dot(x_max, y_min)
+    p5 = dot(130,10)
+    p6 = dot(170,10)
+    p7 = dot(130,30)
+    p8 = dot(170,30)
 
-        top_left.draw_line(top_right)
-        top_right.draw_line(bot_right)
-        bot_right.draw_line(bot_left)
-        bot_left.draw_line(top_left)
-        
-        x_max-=1
-        x_min+=1
-        y_min-=1
-        y_max+=1
+    p1.draw_dot()
+    p5.draw_dot()
+    p1.draw_dot()
+    p2.draw_dot()
+    p3.draw_dot()
+    p4.draw_dot()
+    p5.draw_dot()
+    p6.draw_dot()
+    p7.draw_dot()
+    p8.draw_dot()
+
+    p1.draw_line(p2)
+    p1.draw_line(p3)
+    p2.draw_line(p4)
+    p4.draw_line(p3)
+
+    p5.draw_line(p6)
+    p6.draw_line(p8)
+    p8.draw_line(p7)
+    p7.draw_line(p5)
+
+    p1.draw_line(p5)
+    p2.draw_line(p6)
+    p3.draw_line(p7)
+    p4.draw_line(p8)
+
 
 else:
     print("imported")
