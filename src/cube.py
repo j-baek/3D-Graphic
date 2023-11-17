@@ -39,7 +39,7 @@ class dot: # x,y coordinate
             c_x = -1 # if self.x is bigger, it needs to decrement to reach end_c.x
         c_y = 1 # counter for y
         if self.y > end_c.y:
-            c_y = -1 # if self.y is bigger, it needs to decrement toreach end_c.y
+            c_y = -1 # if self.y is bigger, it needs to decrement to reach end_c.y
         
         x_diff = self.x - end_c.x
         y_diff = self.y - end_c.y
@@ -52,9 +52,13 @@ class dot: # x,y coordinate
         # draw a line with y = a*x function or a horizontal line
         if x_diff != 0:
             for x in range(self.x, end_c.x, c_x):
-                if slope > 0:
-                    y = int(slope*x)
-                elif slope < 0:
+                if slope > 0: # when diff of x,y both pos or neg. The line is in between top-left and bot-right
+                    # case 1: when diff of x,y both pos, line going down from top-left to bot-right. As x increases, y increases (reaching towards bot of screen) 
+                    # case 2: when diff of x,y both neg, line going up from bot-right to top-left. As x decreases, y decreases (reaching towards top of screen) 
+                    y = int(slope*x) 
+                elif slope < 0: # if x_diff > 0, y_diff < 0, and vice versa. The line is in between top-right and bot-left
+                    # case 1: when x_diff > 0, and y_diff < 0, line going up from bot-left to top-right. As x increases, y decreases (reaching towards top of screen)
+                    # case 2: when x_diff < 0, and y_diff > 0, line going down from top-right to bot-left. As x decreases, y increases (reaching towards bot of screen)
                     y = int(slope*x + Y_MIN)
                 else: # when slope is 0 
                     y = end_c.y
