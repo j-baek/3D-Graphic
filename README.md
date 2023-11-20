@@ -2,10 +2,11 @@
 Inspired by the graphical math representation of 3Blue 1Brown, also a youtube who created a 3D cube model
 <br />
 ## check-list for 3D cube rotation
-- [ ] create x,y coordinates
-- [ ] using that x,y coordinates, draw a line
-- [ ] make a function that draws a line
-- [ ] make a function that rotates a drawn line
+- [X] create x,y coordinates
+- [X] using that x,y coordinates, draw a line
+- [X] make a function that draws a line
+- [ ] create x,y,z coordinates
+- [ ] rotate a line by using rotation matrix, according to x,y, z plane
 <br />
 ## check-list for game of life
 
