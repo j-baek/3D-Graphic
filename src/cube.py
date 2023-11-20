@@ -50,23 +50,16 @@ class dot: # x,y coordinate
         else:
             slope = y_diff/x_diff # slope = y/x
 
-        counter = 1
+        x_i = self.x # initial x val
+        y_i = self.y # initial y val 
 
         # draw a line with y = a*x function or a horizontal line
         if x_diff != 0:
             for x in range(self.x, end_c.x, c_x):
-                if slope > 0: # when diff of x,y both pos or neg. The line is in between top-left and bot-right
-                    # case 1: when diff of x,y both pos, line going down from top-left to bot-right. As x increases, y increases (reaching towards bot of screen) 
-                    # case 2: when diff of x,y both neg, line going up from bot-right to top-left. As x decreases, y decreases (reaching towards top of screen) 
-                    y = self.y + round(slope*counter) 
-                    counter+=1
-                elif slope < 0: # if x_diff > 0, y_diff < 0, and vice versa. The line is in between top-right and bot-left
-                    # case 1: when x_diff > 0, and y_diff < 0, line going up from bot-left to top-right. As x increases, y decreases (reaching towards top of screen)
-                    # case 2: when x_diff < 0, and y_diff > 0, line going down from top-right to bot-left. As x decreases, y increases (reaching towards bot of screen)
-                    y = self.y + round(slope*counter)
-                    counter+=1
+                if slope != 0:
+                    y = round(slope*(x - x_i)) + y_i # y = k(x - x_i) + y_i
                 else: # when slope is 0 
-                    y = end_c.y
+                    y = y_i
                 print("x = " + str(x) + " y = " + str(y))
                 coord = dot(x,y)
                 #print("x = " + str(coord.x) + " y = " + str(coord.y))
