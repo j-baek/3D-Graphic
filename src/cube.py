@@ -13,8 +13,7 @@ Y_MIN = 30 # last row of terminal is at y = Y_MIN
 X_OFFSET = 120
 Y_OFFSET = 30
 
-X_MID = 60
-Y_MID = 15
+Z_INIT = 10
 
 THETA = math.radians(45)
 
@@ -36,7 +35,6 @@ class dot: # x,y coordinate
         elif y > Y_MIN:
             y_m = y % Y_MIN # e.g. y = 70, Y_MIN = 60, then y_m = 10
             y = Y_MIN - y_m # y = 60 - 10 = 50
-
     
         # make sure to get x,y,z to be integer 
         self.x = int(x)
@@ -136,50 +134,46 @@ def rotation_z(theta): # rotate on z-aix
 if __name__ == "__main__":
     clear_terminal()
     # 8 vertices of a cube
-    p1 = dot(X_MID/3, Y_MID/3,1)
-    p3 = dot(X_MID*2/3, Y_MID/3,1)
-    p5 = dot(X_MID*2/3, Y_MID*2/3,1)
-    p7 = dot(X_MID/3, Y_MID*2/3,1)
+    p0 = dot(X_MIN/5, Y_MIN/3, Z_INIT)
+    p1 = dot(X_MIN/5, Y_MAX/3, Z_INIT)
+    p2 = dot(X_MAX/5, Y_MAX/3, Z_INIT)
+    p3 = dot(X_MAX/5, Y_MIN/3 ,Z_INIT)
 
-    p2 = dot(X_MID/3, Y_MID/3,1)
-    p4 = dot(X_MID*2/3, Y_MID/3,1)
-    p6 = dot(X_MID*2/3, Y_MID*2/3,1)
-    p8 = dot(X_MID/3, Y_MID*2/3,1)
+    p4 = dot(X_MIN/5, Y_MIN/3, -Z_INIT)
+    p5 = dot(X_MIN/5, Y_MAX/3, -Z_INIT)
+    p6 = dot(X_MAX/5, Y_MAX/3, -Z_INIT)
+    p7 = dot(X_MAX/5, Y_MIN/3 ,-Z_INIT)
 
-    for i in range (0, 100):
-        vertices = [p1, p2, p3, p4, p5, p6, p7, p8]
-        for r in range(0, 180):
-            clear_terminal()
+    vec_original = [p0,p1,p2,p3, p4, p5, p6, p7] # original copy for matrix multiplication, as origianl vectors should not be modified
+    vec_list = vec_original.copy() # setting 'vec_list = vec_original' make both objects point to the same object in memory
+    while(True):
+        for r in range(0, 360):
             theta = math.radians(r)
-            for i in range(0, 3):
-                #print(rotation_y(theta))
-                #rotated = np.matmul(rotation_y(theta), vertices[i].vec)
-                rotated = np.matmul(rotation_x(theta), vertices[i].vec)
-                #rotated = np.matmul(rotation_z(theta), rotated)
-                vertices[i] = dot(rotated[0], rotated[1], 1)
             
-            theta = math.radians(180-r)
-            for i in range(4, 7):
-                rotated = np.matmul(rotation_x(theta), vertices[i].vec)
-                #rotated = np.matmul(rotation_z(theta), rotated)
-                vertices[i] = dot(rotated[0], rotated[1], 1)
+            for i in range(len(vec_list)):
+                rotated = np.matmul(rotation_x(theta),vec_original[i].vec)
+                rotated = np.matmul(rotation_y(theta), rotated)
+                #rotated = np.matmul(rotation_z(theta),rotated)
+                vec_list[i] = dot(rotated[0], rotated[1], rotated[2])
 
-            vertices[0].draw_line(vertices[1])
-            vertices[1].draw_line(vertices[2])
-            vertices[2].draw_line(vertices[3])
-            vertices[3].draw_line(vertices[0])
+            vec_list[0].draw_line(vec_list[1])
+            vec_list[1].draw_line(vec_list[2])
+            vec_list[2].draw_line(vec_list[3])
+            vec_list[3].draw_line(vec_list[0])
 
-            vertices[4].draw_line(vertices[5])
-            vertices[5].draw_line(vertices[6])
-            vertices[6].draw_line(vertices[7])
-            vertices[7].draw_line(vertices[4])
+            vec_list[4].draw_line(vec_list[5])
+            vec_list[5].draw_line(vec_list[6])
+            vec_list[6].draw_line(vec_list[7])
+            vec_list[7].draw_line(vec_list[4])
 
-            vertices[0].draw_line(vertices[4])
-            vertices[1].draw_line(vertices[5])
-            vertices[2].draw_line(vertices[6])
-            vertices[3].draw_line(vertices[7])
-            
-            time.sleep(0.1)
+            vec_list[0].draw_line(vec_list[4])
+            vec_list[1].draw_line(vec_list[5])
+            vec_list[2].draw_line(vec_list[6])
+            vec_list[3].draw_line(vec_list[7])
+
+            time.sleep(0.005)
+            clear_terminal()
+
 
 
 
