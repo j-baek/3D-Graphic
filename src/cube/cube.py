@@ -10,6 +10,8 @@ X_MIN = -120
 Y_MAX = -30 # first row of terminal is at y = 0
 Y_MIN = 30 # last row of terminal is at y = Y_MIN
 
+ASCII_CODE = 33
+
 X_OFFSET = 120
 Y_OFFSET = 30
 
@@ -18,7 +20,7 @@ Z_INIT = 10
 DELAY = 0 # delay of drawing 
 
 class dot: # x,y coordinate
-    def __init__(self, x: int, y: int, z: int): 
+    def __init__(self, x: int, y: int, z: int, code: int): 
         # make sure to keep the coordinate within the max and min
 
         if x > X_MAX:
@@ -37,6 +39,7 @@ class dot: # x,y coordinate
         self.x = int(x)
         self.y = int(y)
         self.z = int(z)
+        self.code = code
         self.vec = [self.x, self.y, self.z] # vector form of a dot (point)
     
     def draw_dot(self):
@@ -44,7 +47,7 @@ class dot: # x,y coordinate
         # which is equivalent to the ASCII value of the escape character.
         print(f"\033[{self.y + Y_OFFSET};{self.x + X_OFFSET}H", end="") # move the point to the appropriate position
         # '\033[32m' makes the text colour to be green, and '\033[0m' resets the text formmating back to the default
-        print("\033[32m*\033[0m") # drawing a star with text color being green
+        print("\033[32m" + chr(self.code) + "\033[0m") # drawing a star with text color being green
 
     def draw_line(self,end_c): # take self, and end coordinate
         c_x = 1 # counter for x
@@ -72,15 +75,17 @@ class dot: # x,y coordinate
                     y = round(slope*(x - x_i)) + y_i # y = k(x - x_i) + y_i
                 else: # when slope is 0 
                     y = y_i
-                coord = dot(x,y, self.z)
+                coord = dot(x,y, self.z, self.code)
                 #print("x = " + str(coord.x) + " y = " + str(coord.y))
                 coord.draw_dot()
                 time.sleep(DELAY)
+                self.code += 1
         else: # draw a vertical line
             for y in range(self.y, end_c.y, c_y):
-                coord = dot(end_c.x, y, self.z)
+                coord = dot(end_c.x, y, self.z, self.code)
                 coord.draw_dot()
                 time.sleep(DELAY)
+                self.code += 1
 
 
 
@@ -130,15 +135,25 @@ def rotation_z(theta): # rotate on z-aix
 if __name__ == "__main__":
     clear_terminal()
     # 8 vertices of a cube
-    p0 = dot(X_MIN/5, Y_MIN/3, Z_INIT)
-    p1 = dot(X_MIN/5, Y_MAX/3, Z_INIT)
-    p2 = dot(X_MAX/5, Y_MAX/3, Z_INIT)
-    p3 = dot(X_MAX/5, Y_MIN/3 ,Z_INIT)
+    ascii_code = ASCII_CODE
+    
+    p0 = dot(X_MIN/5, Y_MIN/3, Z_INIT, ascii_code)
+    ascii_code += 1
+    p1 = dot(X_MIN/5, Y_MAX/3, Z_INIT, ascii_code)
+    ascii_code += 1
+    p2 = dot(X_MAX/5, Y_MAX/3, Z_INIT, ascii_code)
+    ascii_code += 1
+    p3 = dot(X_MAX/5, Y_MIN/3 ,Z_INIT, ascii_code)
+    ascii_code += 1
 
-    p4 = dot(X_MIN/5, Y_MIN/3, -Z_INIT)
-    p5 = dot(X_MIN/5, Y_MAX/3, -Z_INIT)
-    p6 = dot(X_MAX/5, Y_MAX/3, -Z_INIT)
-    p7 = dot(X_MAX/5, Y_MIN/3 ,-Z_INIT)
+    p4 = dot(X_MIN/5, Y_MIN/3, -Z_INIT, ascii_code)
+    ascii_code += 1  
+    p5 = dot(X_MIN/5, Y_MAX/3, -Z_INIT, ascii_code)
+    ascii_code += 1
+    p6 = dot(X_MAX/5, Y_MAX/3, -Z_INIT, ascii_code)
+    ascii_code += 1
+    p7 = dot(X_MAX/5, Y_MIN/3 ,-Z_INIT, ascii_code)
+    ascii_code += 1
 
     vec_original = [p0,p1,p2,p3, p4, p5, p6, p7] # original copy for matrix multiplication, as origianl vectors should not be modified
     vec_list = vec_original.copy() # setting 'vec_list = vec_original' make both objects point to the same object in memory
@@ -147,11 +162,16 @@ if __name__ == "__main__":
         for r in range(0, 360):
             theta = math.radians(r)
             
+            ascii_code = (ascii_code + 1) % 126 
+            if ascii_code == 0:
+                ascii_code = 33
+            
             for i in range(len(vec_list)):
                 rotated = np.matmul(rotation_x(theta),vec_original[i].vec)
                 rotated = np.matmul(rotation_y(theta), rotated)
                 #rotated = np.matmul(rotation_z(theta),rotated)
-                vec_list[i] = dot(rotated[0], rotated[1], rotated[2])
+                vec_list[i] = dot(rotated[0], rotated[1], rotated[2], ascii_code)
+                ascii_code += 1
 
             for j in range(4):
                 vec_list[j].draw_line(vec_list[(j+1) % 4]) # when j = 3, (3 + 1) % 4 = 0. This means connecting [3] and [0]
