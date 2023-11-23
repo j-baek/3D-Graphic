@@ -138,22 +138,14 @@ if __name__ == "__main__":
     ascii_code = ASCII_CODE
     
     p0 = dot(X_MIN/5, Y_MIN/3, Z_INIT, ascii_code)
-    ascii_code += 1
     p1 = dot(X_MIN/5, Y_MAX/3, Z_INIT, ascii_code)
-    ascii_code += 1
     p2 = dot(X_MAX/5, Y_MAX/3, Z_INIT, ascii_code)
-    ascii_code += 1
     p3 = dot(X_MAX/5, Y_MIN/3 ,Z_INIT, ascii_code)
-    ascii_code += 1
 
     p4 = dot(X_MIN/5, Y_MIN/3, -Z_INIT, ascii_code)
-    ascii_code += 1  
     p5 = dot(X_MIN/5, Y_MAX/3, -Z_INIT, ascii_code)
-    ascii_code += 1
     p6 = dot(X_MAX/5, Y_MAX/3, -Z_INIT, ascii_code)
-    ascii_code += 1
     p7 = dot(X_MAX/5, Y_MIN/3 ,-Z_INIT, ascii_code)
-    ascii_code += 1
 
     vec_original = [p0,p1,p2,p3, p4, p5, p6, p7] # original copy for matrix multiplication, as origianl vectors should not be modified
     vec_list = vec_original.copy() # setting 'vec_list = vec_original' make both objects point to the same object in memory
