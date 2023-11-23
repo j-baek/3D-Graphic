@@ -15,9 +15,6 @@ Y_OFFSET = 30
 
 Z_INIT = 10
 
-THETA = math.radians(45)
-
-
 DELAY = 0 # delay of drawing 
 
 class dot: # x,y coordinate
@@ -75,7 +72,6 @@ class dot: # x,y coordinate
                     y = round(slope*(x - x_i)) + y_i # y = k(x - x_i) + y_i
                 else: # when slope is 0 
                     y = y_i
-                print("x = " + str(x) + " y = " + str(y) + " z = " + str(self.z))
                 coord = dot(x,y, self.z)
                 #print("x = " + str(coord.x) + " y = " + str(coord.y))
                 coord.draw_dot()
@@ -144,6 +140,7 @@ if __name__ == "__main__":
     p6 = dot(X_MAX/5, Y_MAX/3, -Z_INIT)
     p7 = dot(X_MAX/5, Y_MIN/3 ,-Z_INIT)
 
+
     vec_original = [p0,p1,p2,p3, p4, p5, p6, p7] # original copy for matrix multiplication, as origianl vectors should not be modified
     vec_list = vec_original.copy() # setting 'vec_list = vec_original' make both objects point to the same object in memory
     while(True):
@@ -171,11 +168,8 @@ if __name__ == "__main__":
             vec_list[2].draw_line(vec_list[6])
             vec_list[3].draw_line(vec_list[7])
 
-            time.sleep(0.005)
+            time.sleep(0.001)
             clear_terminal()
-
-
-
 
 
 else:

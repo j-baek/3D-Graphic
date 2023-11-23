@@ -5,8 +5,8 @@ Inspired by the graphical math representation of 3Blue 1Brown, also a youtube wh
 - [X] create x,y coordinates
 - [X] using that x,y coordinates, draw a line
 - [X] make a function that draws a line
-- [ ] create x,y,z coordinates
-- [ ] rotate a line by using rotation matrix, according to x,y, z plane
+- [X] create x,y,z coordinates
+- [X] rotate a line by using rotation matrix, according to x,y, z plane
 <br />
 ## check-list for game of life
 
