@@ -140,9 +140,9 @@ if __name__ == "__main__":
     p6 = dot(X_MAX/5, Y_MAX/3, -Z_INIT)
     p7 = dot(X_MAX/5, Y_MIN/3 ,-Z_INIT)
 
-
     vec_original = [p0,p1,p2,p3, p4, p5, p6, p7] # original copy for matrix multiplication, as origianl vectors should not be modified
     vec_list = vec_original.copy() # setting 'vec_list = vec_original' make both objects point to the same object in memory
+
     while(True):
         for r in range(0, 360):
             theta = math.radians(r)
@@ -153,20 +153,10 @@ if __name__ == "__main__":
                 #rotated = np.matmul(rotation_z(theta),rotated)
                 vec_list[i] = dot(rotated[0], rotated[1], rotated[2])
 
-            vec_list[0].draw_line(vec_list[1])
-            vec_list[1].draw_line(vec_list[2])
-            vec_list[2].draw_line(vec_list[3])
-            vec_list[3].draw_line(vec_list[0])
-
-            vec_list[4].draw_line(vec_list[5])
-            vec_list[5].draw_line(vec_list[6])
-            vec_list[6].draw_line(vec_list[7])
-            vec_list[7].draw_line(vec_list[4])
-
-            vec_list[0].draw_line(vec_list[4])
-            vec_list[1].draw_line(vec_list[5])
-            vec_list[2].draw_line(vec_list[6])
-            vec_list[3].draw_line(vec_list[7])
+            for j in range(4):
+                vec_list[j].draw_line(vec_list[(j+1) % 4]) # when j = 3, (3 + 1) % 4 = 0. This means connecting [3] and [0]
+                vec_list[j].draw_line(vec_list[j+4])
+                vec_list[j + 4].draw_line(vec_list[((j + 1) % 4) + 4]) # when j = 3, (3+1) % 4  + 4=  4. This means connecting [7] and [4]
 
             time.sleep(0.001)
             clear_terminal()
