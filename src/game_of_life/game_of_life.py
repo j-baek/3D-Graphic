@@ -1,37 +1,90 @@
-X_MAX = 120
-X_MIN = -120
-Y_MAX = -30 # first row of terminal is at y = 0
-Y_MIN = 30 # last row of terminal is at y = Y_MIN
+import os
+import numpy as np
+import time
 
-X_OFFSET = 120
-Y_OFFSET = 30
+ROW_MAX = 60 
+ROW_MIN = 0 
 
-class pixel: # x,y coordinate of pixel
-    def __init__(self, x: int, y: int): 
+COL_MAX = 240
+COL_MIN = 0
+
+class cell: # x,y coordinate of cell
+    def __init__(self, row: int, col: int, live: int): 
         # make sure to keep the coordinate within the max and min
 
-        if x > X_MAX:
-            x_m = x % X_MAX # e.g. x = 270, X_MAX = 250, then x_m = 20
-            x = X_MAX - x_m # x = 250 - 20 = 230
-        elif x < X_MIN:
-            x = abs(x) % X_MAX # e.g. x = - 270, X_MAX = 250, then x_m = 20
-        
-        if y < Y_MAX:
-            y = abs(y) % Y_MIN # e.g. y = -70, Y_MIN = 60, then y = 10
-        elif y > Y_MIN:
-            y_m = y % Y_MIN # e.g. y = 70, Y_MIN = 60, then y_m = 10
-            y = Y_MIN - y_m # y = 60 - 10 = 50
+        if row > ROW_MAX:
+            row = ROW_MAX 
+        elif row < ROW_MIN:
+            row = ROW_MIN
+        if col > COL_MAX:
+            col = COL_MAX
+        elif col < COL_MIN:
+            col = COL_MIN
+
+        if live != 1: # live == 1 means cell is alive, and 0 means cell is dead
+            live = 0
     
-        # make sure to get x,y,z to be integer 
-        self.x = int(x)
-        self.y = int(y)
+        # make sure to get x,y
+        self.row = int(row)
+        self.col = int(col)
+        self.live = live
     
-    def draw_dot(self):
+    def draw_cell(self):
         # ANSI escape code used. '\033' is the escape character in Python strings, 
         # which is equivalent to the ASCII value of the escape character.
-        print(f"\033[{self.y + Y_OFFSET};{self.x + X_OFFSET}H", end="") # move the point to the appropriate position
+        print(f"\033[{self.row};{self.col}H", end="") # move the point to the appropriate position
         # '\033[32m' makes the text colour to be green, and '\033[0m' resets the text formmating back to the default
-        print("\033[32m*\033[0m") # drawing a star with text color being green
+        if self.live == 1:
+            print("\033[32mC\033[0m") # drawing a star with text color being green
+        else:
+            print(" ") # printing white space, indicating that the cell is dead
+
+    def check_neighbours(self, cell_matrix): # checking how many neighbours are alive, and return number of live cells
+        row = self.row
+        col = self.col
+
+        r_bound_max = True
+        r_bound_min = True
+        c_bound_max = True
+        c_bound_min = True
+
+        live_count = 0
+
+        if row >= ROW_MAX:
+            r_bound_max = False
+        if row <= ROW_MIN:
+            r_bound_min = False
+        
+        if col >= COL_MAX:
+            c_bound_max = False
+        if col <= COL_MIN:
+            c_bound_min = False
+        
+        if r_bound_max == True and c_bound_min == True:
+            if cell_matrix[row-1][col-1].live == 1:
+                live_count +=1
+            if cell_matrix[row-1][col].live == 1:
+                live_count += 1
+            if cell_matrix[row-1][col+1].live == 1:
+                live_count += 1
+
+            if cell_matrix[row][col-1].live == 1:
+                live_count += 1
+            if cell_matrix[row][col+1].live == 1:
+                live_count += 1
+            
+            if cell_matrix[row+1, col-1].live == 1:
+                live_count += 1
+            if cell_matrix[row+1, col].live == 1:
+                live_count += 1
+            if cell_matrix[row+1, col+1].live == 1:
+                live_count += 1
+            
+            return live_count 
+        else:
+            print("ERROR!!!!! OUT OF BOUND")
+    
+
 
 def clear_terminal():
     if os.name == 'posix': # Linux or macOS
@@ -49,4 +102,56 @@ def clear_terminal():
 # Any live cell with more than three live neighbours dies, as if by overpopulation
 # Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction
 
+if __name__ == "__main__":
+    # make cell matrix with all cells being dead
+    clear_terminal()
 
+    cell_matrix = np.empty((ROW_MAX, COL_MAX), dtype=cell)
+
+    for row in range (len(cell_matrix)): # row = y
+        for col in range (len(cell_matrix[0])): # col = x
+            c = cell(row, col, 0) # make a cell at proper row and col, with cell state being dead
+            cell_matrix[row][col] = c
+    
+    #cell_matrix[15, 60].live = 1
+    #cell_matrix[14, 60].live = 1
+    #cell_matrix[15, 59].live = 1
+    #cell_matrix[15, 61].live = 1
+    #cell_matrix[16, 60].live = 1
+
+    cell_matrix[15, 60].live = 1
+    cell_matrix[15, 61].live = 1
+    cell_matrix[15, 62].live = 1
+
+    for row in range (len(cell_matrix)): # row = y
+        for col in range (len(cell_matrix[0])): # col = x
+            cell_matrix[row][col].draw_cell()
+
+    while(True):
+        for row in range (2, 30):
+            for col in range (2, 150):
+                c = cell_matrix[row][col]
+                live_count = c.check_neighbours(cell_matrix)
+                if c.live == 1:     
+                    if live_count < 2:
+                        c.live = 0
+                    elif live_count > 1 and live_count < 4:
+                        c.live = 1
+                    elif live_count > 3:
+                        c.live = 0
+                
+                if live_count == 2 and c.live == 0:
+                    c.live = 1
+        
+        for row in range (len(cell_matrix)): # row = y
+            for col in range (len(cell_matrix[0])): # col = x
+                cell_matrix[row][col].draw_cell()
+        
+        time.sleep(0.1)
+
+
+
+    
+
+
+    
