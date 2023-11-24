@@ -8,6 +8,13 @@ ROW_MIN = 0
 COL_MAX = 240
 COL_MIN = 0
 
+def is_valid_index(row, col): # checking whether the index is within max and min of row and col
+    if row < ROW_MAX and row >= ROW_MIN:
+        if col < COL_MAX and col >= COL_MIN:
+            return True
+    return False 
+
+
 class cell: # x,y coordinate of cell
     def __init__(self, row: int, col: int, curr_state: int, next_state: int): 
         # make sure to keep the coordinate within the max and min
@@ -38,7 +45,7 @@ class cell: # x,y coordinate of cell
         print(f"\033[{self.row};{self.col}H", end="") # move the point to the appropriate position
         # '\033[32m' makes the text colour to be green, and '\033[0m' resets the text formmating back to the default
         if self.curr_state == 1:
-            print("\033[32mC\033[0m") # drawing a star with text color being green
+            print("\033[32m" + "*" + "\033[0m") # drawing a star with text color being green
         else:
             print(" ") # printing white space, indicating that the cell is dead
 
@@ -46,38 +53,24 @@ class cell: # x,y coordinate of cell
         row = self.row
         col = self.col
 
-        r_bound_max = True
-        r_bound_min = True
-        c_bound_max = True
-        c_bound_min = True
-
+        i = -1
         live_count = 0
+        while(i < 2):
+            if is_valid_index(row+i, col+i):
+                if cell_matrix[row+i][col+i].curr_state == 1:
+                    live_count += 1
+            if is_valid_index(row+i, col):
+                if cell_matrix[row+i][col].curr_state == 1:
+                    live_count += 1
+            if is_valid_index(row, col+i):
+                if cell_matrix[row][col + i].curr_state == 1:
+                    live_count += 1
+            if is_valid_index(row+i, col - i):
+                if cell_matrix [row + i][col - i].curr_state == 1:
+                    live_count += 1
+            i += 2
 
-        if row >= ROW_MAX:
-            r_bound_max = False
-        if row <= ROW_MIN:
-            r_bound_min = False
-        
-        if col >= COL_MAX:
-            c_bound_max = False
-        if col <= COL_MIN:
-            c_bound_min = False
-        
-        if r_bound_max == True and c_bound_min == True:
-            for i in range(-1, 2):
-                if i != 0:
-                    if cell_matrix[row+i][col+i].curr_state == 1:
-                        live_count += 1
-                    if cell_matrix[row+i][col].curr_state == 1:
-                        live_count += 1
-                    if cell_matrix[row][col + i].curr_state == 1:
-                        live_count += 1
-                    if cell_matrix [row + i][col - i].curr_state == 1:
-                        live_count += 1
-            
-            return live_count 
-        else:
-            print("ERROR!!!!! OUT OF BOUND")
+        return live_count
     
 
 def clear_terminal():
@@ -87,8 +80,6 @@ def clear_terminal():
         os.system('cls') # clears the terminal
     else: 
         print("operating system: " + os.name)
-
-
 
 # Conway's game of life rules
 # Any live cell with fewwer than two live neighbours dies, as if caused by underpopulation
@@ -107,39 +98,126 @@ if __name__ == "__main__":
             c = cell(row, col, 0, 0) # make a cell at proper row and col, with cell state being dead
             cell_matrix[row][col] = c
     
-    
     # oscillator (blinker)
-    cell_matrix[15, 60].curr_state = 1
-    cell_matrix[15, 61].curr_state = 1
-    cell_matrix[15, 62].curr_state = 1
-    cell_matrix[14, 61].curr_state = 1
-    cell_matrix[16, 61].curr_state = 1
+    cell_matrix[5, 60].curr_state = 1
+    cell_matrix[5, 61].curr_state = 1
+    cell_matrix[5, 62].curr_state = 1
+    cell_matrix[4, 61].curr_state = 1
+    cell_matrix[6, 61].curr_state = 1
 
     # oscillator (lighthouse)
-    cell_matrix[30, 100].curr_state = 1
-    cell_matrix[30, 101].curr_state = 1
-    cell_matrix[31, 100].curr_state = 1
-    cell_matrix[32, 103].curr_state = 1
-    cell_matrix[33, 103].curr_state = 1
-    cell_matrix[33, 102].curr_state = 1
+    cell_matrix[10, 100].curr_state = 1
+    cell_matrix[10, 101].curr_state = 1
+    cell_matrix[11, 100].curr_state = 1
+    cell_matrix[12, 103].curr_state = 1
+    cell_matrix[13, 103].curr_state = 1
+    cell_matrix[13, 102].curr_state = 1
 
-    # oscillator (glider)
-
+    # Spaceship (glider)
     cell_matrix[5, 30].curr_state = 1
     cell_matrix[6, 31].curr_state = 1
     cell_matrix[6, 32].curr_state = 1
     cell_matrix[5, 32].curr_state = 1
     cell_matrix[4, 32].curr_state = 1
 
+    # Spaceship (glider)
+    cell_matrix[5, 25].curr_state = 1
+    cell_matrix[6, 26].curr_state = 1
+    cell_matrix[6, 27].curr_state = 1
+    cell_matrix[5, 27].curr_state = 1
+    cell_matrix[4, 27].curr_state = 1
 
+     # Spaceship (glider)
+    cell_matrix[5, 35].curr_state = 1
+    cell_matrix[6, 36].curr_state = 1
+    cell_matrix[6, 37].curr_state = 1
+    cell_matrix[5, 37].curr_state = 1
+    cell_matrix[4, 37].curr_state = 1
+
+    # Spaceship (glider)
+    cell_matrix[20, 60].curr_state = 1
+    cell_matrix[20, 61].curr_state = 1
+    cell_matrix[21, 60].curr_state = 1
+    cell_matrix[21, 62].curr_state = 1
+    cell_matrix[22, 60].curr_state = 1
+
+    # Spaceship (glider)
+    cell_matrix[20, 65].curr_state = 1
+    cell_matrix[20, 66].curr_state = 1
+    cell_matrix[21, 65].curr_state = 1
+    cell_matrix[21, 67].curr_state = 1
+    cell_matrix[22, 65].curr_state = 1
+
+    # Spaceship (glider)
+    cell_matrix[20, 70].curr_state = 1
+    cell_matrix[20, 71].curr_state = 1
+    cell_matrix[21, 70].curr_state = 1
+    cell_matrix[21, 72].curr_state = 1
+    cell_matrix[22, 70].curr_state = 1
+
+    # Spaceship (glider)
+    cell_matrix[15, 70].curr_state = 1
+    cell_matrix[15, 71].curr_state = 1
+    cell_matrix[16, 70].curr_state = 1
+    cell_matrix[16, 72].curr_state = 1
+    cell_matrix[17, 70].curr_state = 1
+
+    # Spaceship (glider)
+    cell_matrix[25, 70].curr_state = 1
+    cell_matrix[25, 71].curr_state = 1
+    cell_matrix[26, 70].curr_state = 1
+    cell_matrix[26, 72].curr_state = 1
+    cell_matrix[27, 70].curr_state = 1
+
+    # replicator
+    cell_matrix[15, 50].curr_state = 1
+    cell_matrix[16, 50].curr_state = 1
+    cell_matrix[17, 50].curr_state = 1
+
+    cell_matrix[17, 51].curr_state = 1
+    cell_matrix[17, 52].curr_state = 1
+
+    cell_matrix[14, 51].curr_state = 1
+
+    cell_matrix[16, 53].curr_state = 1
+
+    cell_matrix[15, 54].curr_state = 1
+    cell_matrix[14, 54].curr_state = 1
+    cell_matrix[13, 54].curr_state = 1
+
+    cell_matrix[13, 53].curr_state = 1
+    cell_matrix[13, 52].curr_state = 1
+
+    R_M = int(ROW_MAX/2)
+    COL_M = int(COL_MAX /2)
+    r_off_set = -5
+    c_off_set = -50
+
+    cell_matrix[R_M + r_off_set, COL_M + c_off_set].curr_state = 1
+    cell_matrix[R_M+1 + r_off_set, COL_M + c_off_set].curr_state = 1
+    cell_matrix[R_M+2 + r_off_set, COL_M + c_off_set].curr_state = 1
+
+    cell_matrix[R_M+2 + r_off_set, COL_M+1 + c_off_set].curr_state = 1
+    cell_matrix[R_M+2 + r_off_set, COL_M+2 + c_off_set].curr_state = 1
+
+    cell_matrix[R_M-1 + r_off_set, COL_M+1 + c_off_set].curr_state = 1
+
+    cell_matrix[R_M+1 + r_off_set, COL_M+3 + c_off_set].curr_state = 1
+
+    cell_matrix[R_M + r_off_set, COL_M+4 + c_off_set].curr_state = 1
+    cell_matrix[R_M-1 + r_off_set, COL_M+4 + c_off_set].curr_state = 1
+    cell_matrix[R_M-2 + r_off_set, COL_M+4 + c_off_set].curr_state = 1
+
+    cell_matrix[R_M-2 + r_off_set, COL_M+3 + c_off_set].curr_state = 1
+    cell_matrix[R_M-2 + r_off_set, COL_M+2+ c_off_set].curr_state = 1
 
     for row in range (len(cell_matrix)): # row = y
         for col in range (len(cell_matrix[0])): # col = x
             cell_matrix[row][col].draw_cell()
 
     while(True):
-        for row in range (2, 50):
-            for col in range (2, 200):
+        for row in range (ROW_MIN, ROW_MAX):
+            for col in range (COL_MIN, COL_MAX):
                 c = cell_matrix[row][col]
                 live_count = c.check_neighbours(cell_matrix)
                 if c.curr_state == 1: # when cell is alive
@@ -159,5 +237,3 @@ if __name__ == "__main__":
                 next_cell.curr_state = next_cell.next_state
                 next_cell.next_state = 0 
                 next_cell.draw_cell()
-        
-        time.sleep(0.01)
