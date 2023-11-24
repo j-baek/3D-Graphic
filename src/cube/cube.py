@@ -156,7 +156,7 @@ if __name__ == "__main__":
             
             ascii_code = (ascii_code + 1) % 126 
             if ascii_code == 0:
-                ascii_code = 33
+                ascii_code = ASCII_CODE
             
             for i in range(len(vec_list)):
                 rotated = np.matmul(rotation_x(theta),vec_original[i].vec)
