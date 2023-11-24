@@ -155,7 +155,7 @@ if __name__ == "__main__":
             theta = math.radians(r)
             
             ascii_code = (ascii_code + 1) % 126 
-            if ascii_code == 0:
+            if ascii_code < ASCII_CODE:
                 ascii_code = ASCII_CODE
             
             for i in range(len(vec_list)):
