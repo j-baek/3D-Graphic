@@ -23,11 +23,14 @@ class cell: # x,y coordinate of cell
 
         if curr_state != 1: # state == 1 means cell is alive, and 0 means cell is dead
             curr_state = 0
+        if next_state != 1:  
+            next_state = 0
     
         # make sure to get x,y
         self.row = int(row)
         self.col = int(col)
         self.curr_state = curr_state
+        self.next_state = next_state
     
     def draw_cell(self):
         # ANSI escape code used. '\033' is the escape character in Python strings, 
@@ -61,30 +64,21 @@ class cell: # x,y coordinate of cell
             c_bound_min = False
         
         if r_bound_max == True and c_bound_min == True:
-            if cell_matrix[row-1][col-1].live == 1:
-                live_count +=1
-            if cell_matrix[row-1][col].live == 1:
-                live_count += 1
-            if cell_matrix[row-1][col+1].live == 1:
-                live_count += 1
-
-            if cell_matrix[row][col-1].live == 1:
-                live_count += 1
-            if cell_matrix[row][col+1].live == 1:
-                live_count += 1
-            
-            if cell_matrix[row+1, col-1].live == 1:
-                live_count += 1
-            if cell_matrix[row+1, col].live == 1:
-                live_count += 1
-            if cell_matrix[row+1, col+1].live == 1:
-                live_count += 1
+            for i in range(-1, 2):
+                if i != 0:
+                    if cell_matrix[row+i][col+i].curr_state == 1:
+                        live_count += 1
+                    if cell_matrix[row+i][col].curr_state == 1:
+                        live_count += 1
+                    if cell_matrix[row][col + i].curr_state == 1:
+                        live_count += 1
+                    if cell_matrix [row + i][col - i].curr_state == 1:
+                        live_count += 1
             
             return live_count 
         else:
             print("ERROR!!!!! OUT OF BOUND")
     
-
 
 def clear_terminal():
     if os.name == 'posix': # Linux or macOS
@@ -110,48 +104,60 @@ if __name__ == "__main__":
 
     for row in range (len(cell_matrix)): # row = y
         for col in range (len(cell_matrix[0])): # col = x
-            c = cell(row, col, 0) # make a cell at proper row and col, with cell state being dead
+            c = cell(row, col, 0, 0) # make a cell at proper row and col, with cell state being dead
             cell_matrix[row][col] = c
     
-    #cell_matrix[15, 60].live = 1
-    #cell_matrix[14, 60].live = 1
-    #cell_matrix[15, 59].live = 1
-    #cell_matrix[15, 61].live = 1
-    #cell_matrix[16, 60].live = 1
+    
+    # oscillator (blinker)
+    cell_matrix[15, 60].curr_state = 1
+    cell_matrix[15, 61].curr_state = 1
+    cell_matrix[15, 62].curr_state = 1
+    cell_matrix[14, 61].curr_state = 1
+    cell_matrix[16, 61].curr_state = 1
 
-    cell_matrix[15, 60].live = 1
-    cell_matrix[15, 61].live = 1
-    cell_matrix[15, 62].live = 1
+    # oscillator (lighthouse)
+    cell_matrix[30, 100].curr_state = 1
+    cell_matrix[30, 101].curr_state = 1
+    cell_matrix[31, 100].curr_state = 1
+    cell_matrix[32, 103].curr_state = 1
+    cell_matrix[33, 103].curr_state = 1
+    cell_matrix[33, 102].curr_state = 1
+
+    # oscillator (glider)
+
+    cell_matrix[5, 30].curr_state = 1
+    cell_matrix[6, 31].curr_state = 1
+    cell_matrix[6, 32].curr_state = 1
+    cell_matrix[5, 32].curr_state = 1
+    cell_matrix[4, 32].curr_state = 1
+
+
 
     for row in range (len(cell_matrix)): # row = y
         for col in range (len(cell_matrix[0])): # col = x
             cell_matrix[row][col].draw_cell()
 
     while(True):
-        for row in range (2, 30):
-            for col in range (2, 150):
+        for row in range (2, 50):
+            for col in range (2, 200):
                 c = cell_matrix[row][col]
                 live_count = c.check_neighbours(cell_matrix)
-                if c.live == 1:     
+                if c.curr_state == 1: # when cell is alive
                     if live_count < 2:
-                        c.live = 0
+                        c.next_state = 0
                     elif live_count > 1 and live_count < 4:
-                        c.live = 1
+                        c.next_state = 1
                     elif live_count > 3:
-                        c.live = 0
-                
-                if live_count == 2 and c.live == 0:
-                    c.live = 1
+                        c.next_state = 0
+                else: # when cell is dead
+                    if live_count == 3:
+                        c.next_state = 1
         
         for row in range (len(cell_matrix)): # row = y
             for col in range (len(cell_matrix[0])): # col = x
-                cell_matrix[row][col].draw_cell()
+                next_cell = cell_matrix[row][col]
+                next_cell.curr_state = next_cell.next_state
+                next_cell.next_state = 0 
+                next_cell.draw_cell()
         
-        time.sleep(0.1)
-
-
-
-    
-
-
-    
+        time.sleep(0.01)
