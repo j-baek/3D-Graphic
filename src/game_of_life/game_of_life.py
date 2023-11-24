@@ -8,6 +8,8 @@ ROW_MIN = 0
 COL_MAX = 240
 COL_MIN = 0
 
+ASCII_CODE = 33
+
 def is_valid_index(row, col): # checking whether the index is within max and min of row and col
     if row < ROW_MAX and row >= ROW_MIN:
         if col < COL_MAX and col >= COL_MIN:
@@ -45,7 +47,11 @@ class cell: # x,y coordinate of cell
         print(f"\033[{self.row};{self.col}H", end="") # move the point to the appropriate position
         # '\033[32m' makes the text colour to be green, and '\033[0m' resets the text formmating back to the default
         if self.curr_state == 1:
-            print("\033[32m" + "*" + "\033[0m") # drawing a star with text color being green
+            global ASCII_CODE 
+            ASCII_CODE = (ASCII_CODE + 1) % 126 
+            if ASCII_CODE < 33:
+                ASCII_CODE = 33
+            print("\033[32m" + chr(ASCII_CODE) + "\033[0m") # drawing a star with text color being green
         else:
             print(" ") # printing white space, indicating that the cell is dead
 
