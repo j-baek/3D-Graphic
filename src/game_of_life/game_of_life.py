@@ -9,7 +9,7 @@ COL_MAX = 240
 COL_MIN = 0
 
 class cell: # x,y coordinate of cell
-    def __init__(self, row: int, col: int, live: int): 
+    def __init__(self, row: int, col: int, curr_state: int, next_state: int): 
         # make sure to keep the coordinate within the max and min
 
         if row > ROW_MAX:
@@ -21,20 +21,20 @@ class cell: # x,y coordinate of cell
         elif col < COL_MIN:
             col = COL_MIN
 
-        if live != 1: # live == 1 means cell is alive, and 0 means cell is dead
-            live = 0
+        if curr_state != 1: # state == 1 means cell is alive, and 0 means cell is dead
+            curr_state = 0
     
         # make sure to get x,y
         self.row = int(row)
         self.col = int(col)
-        self.live = live
+        self.curr_state = curr_state
     
     def draw_cell(self):
         # ANSI escape code used. '\033' is the escape character in Python strings, 
         # which is equivalent to the ASCII value of the escape character.
         print(f"\033[{self.row};{self.col}H", end="") # move the point to the appropriate position
         # '\033[32m' makes the text colour to be green, and '\033[0m' resets the text formmating back to the default
-        if self.live == 1:
+        if self.curr_state == 1:
             print("\033[32mC\033[0m") # drawing a star with text color being green
         else:
             print(" ") # printing white space, indicating that the cell is dead
