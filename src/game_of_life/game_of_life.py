@@ -97,7 +97,7 @@ if __name__ == "__main__":
     # make cell matrix with all cells being dead
     clear_terminal()
 
-    cell_matrix = np.empty((ROW_MAX, COL_MAX), dtype=cell)
+    cell_matrix = np.empty((ROW_MAX, COL_MAX), dtype=cell) 
 
     for row in range (len(cell_matrix)): # row = y
         for col in range (len(cell_matrix[0])): # col = x

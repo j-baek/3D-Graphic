@@ -13,8 +13,7 @@ Inspired by the graphical math representation of 3Blue 1Brown, also a youtube wh
 - [X] check cell's neighbours
 - [X] apply four rules of game of life and render the cells   
 ## check-list for mandelbrot fractal
-- [ ] create a grid that can be accesed with (x,y)
-- [ ] make a function that draws a mathematical function
+- [X] make a function that draws a mathematical function
 - [ ] make a function that zooms in or out
 - [ ] make a function that identifies which point is within mandelbrot set
 - [ ] make a function that draws mandelbrot fractal
