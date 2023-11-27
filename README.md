@@ -14,6 +14,7 @@ Inspired by the graphical math representation of 3Blue 1Brown, also a youtube wh
 - [X] apply four rules of game of life and render the cells   
 ## check-list for mandelbrot fractal
 - [X] make a function that draws a mathematical function
-- [X] make a function that zooms in or out
-- [ ] make a function that identifies which point is within mandelbrot set
-- [ ] make a function that draws mandelbrot fractal
+- [] make a function that zooms in or out
+- [X] make a function that identifies which point is within mandelbrot set
+- [X] make a function that draws mandelbrot fractal
+- [X] map number of iterations it required to escape mandelbrot set to ascii code so that mandelbrot fractal looks visually better.
