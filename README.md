@@ -17,7 +17,3 @@ Inspired by the graphical math representation of 3Blue 1Brown, also a youtube wh
 - [X] make a function that identifies which point is within mandelbrot set
 - [X] make a function that draws mandelbrot fractal
 - [X] make a function that zooms in or out at the proper position
-## check-list for Janggi (Korean Chess)
-- [ ] make objects for each janggi piece
-- [ ] display a board
-- [ ] display janggi pieces on a board
