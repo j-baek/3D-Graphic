@@ -42,10 +42,10 @@ def zoom(matrix, type, zoom_iter_max, max_iteration): # zoom in or out, or stay 
         zoom_scale = 1
     if type >= 1:
         scale = 0.0001
-        zoom_scale = 0.5
+        zoom_scale = 5
     if type <= -1:
         scale = 5
-        zoom_scale = 1.5
+        zoom_scale = 2/3
         
     while(zoom_iter < zoom_iter_max):
         for row in range(len(matrix)):
@@ -72,10 +72,8 @@ def zoom(matrix, type, zoom_iter_max, max_iteration): # zoom in or out, or stay 
             print() # for new line for every row
         
         zoom_iter += 1
-        scale /= zoom_scale
+        scale *= zoom_scale
     
-    print(scale)
-
 
 if __name__ == "__main__":
     clear_terminal()
