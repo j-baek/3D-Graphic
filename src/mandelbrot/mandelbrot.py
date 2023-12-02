@@ -1,10 +1,10 @@
 import os 
 
-X_MAX = 240 # x = column
-Y_MAX = 56 # y = row
+X_MAX = 180 # x = column
+Y_MAX = 50 # y = row
 
-X_POS_MAX = 120
-Y_POS_MAX = 28
+X_POS_MAX = 90
+Y_POS_MAX = 25
 
 X_CENTER = 0.3001301496 # found this point on youtube
 Y_CENTER = 0.025500022629245 # found this point on youtube

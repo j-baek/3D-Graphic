@@ -2,10 +2,10 @@ import os
 import numpy as np
 import time
 
-ROW_MAX = 60 
+ROW_MAX = 50 
 ROW_MIN = 0 
 
-COL_MAX = 240
+COL_MAX = 180
 COL_MIN = 0
 
 ASCII_CODE = 33
@@ -51,7 +51,7 @@ class cell: # x,y coordinate of cell
             ASCII_CODE = (ASCII_CODE + 1) % 126 
             if ASCII_CODE < 33:
                 ASCII_CODE = 33
-            print("\033[32m" + chr(ASCII_CODE) + "\033[0m") # drawing a star with text color being green
+            print("\033[32m" + "." + "\033[0m") # drawing a star with text color being green
         else:
             print(" ") # printing white space, indicating that the cell is dead
 
@@ -243,3 +243,5 @@ if __name__ == "__main__":
                 next_cell.curr_state = next_cell.next_state
                 next_cell.next_state = 0 
                 next_cell.draw_cell()
+                
+        time.sleep(0.1)

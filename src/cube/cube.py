@@ -3,17 +3,17 @@ import time
 import math
 import numpy as np
 
-# x from 0 to 260, and y from 0 to 60,
+# x from 0 to 180, and y from 0 to 50,
 # but setting the mid point on x,y plane to be origin (x = 0, y = 0)
-X_MAX = 120
-X_MIN = -120
-Y_MAX = -30 # first row of terminal is at y = 0
-Y_MIN = 30 # last row of terminal is at y = Y_MIN
+X_MAX = 90
+X_MIN = -90
+Y_MAX = -25 # first row of terminal is at y = 0
+Y_MIN = 25 # last row of terminal is at y = Y_MIN
 
 ASCII_CODE = 33
 
-X_OFFSET = 120
-Y_OFFSET = 30
+X_OFFSET = 90
+Y_OFFSET = 25
 
 Z_INIT = 10
 
@@ -170,7 +170,7 @@ if __name__ == "__main__":
                 vec_list[j].draw_line(vec_list[j+4])
                 vec_list[j + 4].draw_line(vec_list[((j + 1) % 4) + 4]) # when j = 3, (3+1) % 4  + 4=  4. This means connecting [7] and [4]
 
-            time.sleep(0.001)
+            time.sleep(0.01)
             clear_terminal()
 
 
