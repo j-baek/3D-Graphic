@@ -45,7 +45,7 @@ class cell: # x,y coordinate of cell
         # '\033[32m' makes the text colour to be green, and '\033[0m' resets the text formmating back to the default
         # 'u2588' is unicode for full block
         if self.curr_state == 1:
-            print("\033[32m" + "\u2588" + "\033[0m") # drawing a star with text color being green
+            print("\033[32m" + "\u2588" + "\033[0m") # drawing full block with green colour
         else:
             print(" ") # printing white space, indicating that the cell is dead
 
