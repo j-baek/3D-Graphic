@@ -59,7 +59,7 @@ def zoom(matrix, type, zoom_iter_max, max_iteration): # zoom in or out, or stay 
 
                 in_m_set = in_mandelbrot_set(x,y, max_iteration)
                 if in_m_set:
-                    matrix[row][col] = "."
+                    matrix[row][col] = "\u2588"
                 else:
                     matrix[row][col]= " "
 
@@ -77,7 +77,7 @@ def zoom(matrix, type, zoom_iter_max, max_iteration): # zoom in or out, or stay 
 
 if __name__ == "__main__":
     clear_terminal()
-    matrix = [["."]*X_MAX for _ in range(Y_MAX)] # make a matrix with row = Y_MAX and col = X_MAX
+    matrix = [["\u2588"]*X_MAX for _ in range(Y_MAX)] # make a matrix with row = Y_MAX and col = X_MAX
     max_iteration = 1000
     
     zoom(matrix, -1, 500, max_iteration)
